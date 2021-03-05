@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://songshibo.github.io/images/stack.jpg">
 <meta property="og:image" content="https://songshibo.github.io/images/stack1.png">
 <meta property="article:published_time" content="2017-01-15T12:41:50.000Z">
-<meta property="article:modified_time" content="2021-03-05T14:32:59.483Z">
+<meta property="article:modified_time" content="2021-03-05T14:59:17.904Z">
 <meta property="article:author" content="Golevka">
 <meta property="article:tag" content="-game">
 <meta name="twitter:card" content="summary">
@@ -160,7 +160,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>写这个是因为自己和同学尝试用unity实现这个游戏。<br><img src="/images/stack.jpg" alt="stack"><br>核心的算法就在与动态的生成方块，并且在点击时即时的断裂。</p>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>写这个是因为自己和同学尝试用unity实现这个游戏。<br><img src="/images/stack.jpg" alt="stack"><br>核心的算法就在与动态的生成方块，并且在点击时即时的断裂。</p>
 <h2 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h2><p>我借鉴了Procedural Generation中的地图的mesh随机产生的方法，使用mesh filter即时的根据长宽来计算mesh。</p>
 <h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><h4 id="顶点"><a href="#顶点" class="headerlink" title="顶点"></a>顶点</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Node&#123;</span><br><span class="line">		public Vector3 position;</span><br><span class="line">		public int vertexindex &#x3D; -1;</span><br><span class="line"></span><br><span class="line">		public Node(Vector3 _pos)&#123;</span><br><span class="line">			position &#x3D; _pos;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public class controlNode:Node&#123;</span><br><span class="line">		public Node bottom;</span><br><span class="line"></span><br><span class="line">		public controlNode(Vector3 _pos,float size):base(_pos)&#123;</span><br><span class="line">			bottom &#x3D; new Node(position - Vector3.up * size&#x2F;4f);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 <p>这2个结构体，第一个是基本的顶点，然而即时生成的cube拥有8个顶点，我们并不想使用8个node去计算，因此使用了controlNode来记录cube的上表面（y轴正方向），其余的顶点使用bottom来记录。</p>
