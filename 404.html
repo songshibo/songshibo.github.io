@@ -1,181 +1,378 @@
 <head>
 	<style>
-		@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
-		@import url('https://fonts.googleapis.com/css?family=Catamaran:400,800');
-		.error-container {
-		  text-align: center;
-		  font-size: 180px;
-		  font-family: 'Catamaran', sans-serif;
-		  font-weight: 800;
-		  margin: 20px 15px;
-		}
-		.error-container > span {
-		  display: inline-block;
-		  line-height: 0.7;
-		  position: relative;
-		  color: #FFB485;
-		}
-		.error-container > span {
-		  display: inline-block;
-		  position: relative;
-		  vertical-align: middle;
-		}
-		.error-container > span:nth-of-type(1) {
-		  color: #D1F2A5;
-		  animation: colordancing 4s infinite;
-		}
-		.error-container > span:nth-of-type(3) {
-		  color: #F56991;
-		  animation: colordancing2 4s infinite;
-		}
-		.error-container > span:nth-of-type(2) {
-		  width: 120px;
-		  height: 120px;
-		  border-radius: 999px;
-		}
-		.error-container > span:nth-of-type(2):before,
-		.error-container > span:nth-of-type(2):after {
-			border-radius: 0%;
-			content:"";
-			position: absolute;
-			top: 0; left: 0;
-			width: inherit; height: inherit;
-		  border-radius: 999px;
-			box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
-						inset 0 30px 0 rgba(239, 250, 180, 0.4),
-						inset -30px 0 0 rgba(255, 196, 140, 0.4),	
-						inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-		  animation: shadowsdancing 4s infinite;
-		}
-		.error-container > span:nth-of-type(2):before {
-			-webkit-transform: rotate(45deg);
-			   -moz-transform: rotate(45deg);
-					transform: rotate(45deg);
+		*,
+		*:before,
+		*:after {
+		  box-sizing: border-box;
 		}
 
-		.screen-reader-text {
-		    position: absolute;
-		    top: -9999em;
-		    left: -9999em;
-		}
-		@keyframes shadowsdancing {
-		  0% {
-		    box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
-						inset 0 30px 0 rgba(239, 250, 180, 0.4),
-						inset -30px 0 0 rgba(255, 196, 140, 0.4),	
-						inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-		  }
-		  25% {
-		    box-shadow: inset 30px 0 0 rgba(245, 105, 145, 0.4),
-						inset 0 30px 0 rgba(209, 242, 165, 0.4),
-						inset -30px 0 0 rgba(239, 250, 180, 0.4),	
-						inset 0 -30px 0 rgba(255, 196, 140, 0.4);
-		  }
-		  50% {
-		     box-shadow: inset 30px 0 0 rgba(255, 196, 140, 0.4),
-						inset 0 30px 0 rgba(245, 105, 145, 0.4),
-						inset -30px 0 0 rgba(209, 242, 165, 0.4),	
-						inset 0 -30px 0 rgba(239, 250, 180, 0.4);
-		  }
-		  75% {
-		   box-shadow: inset 30px 0 0 rgba(239, 250, 180, 0.4),
-						inset 0 30px 0 rgba(255, 196, 140, 0.4),
-						inset -30px 0 0 rgba(245, 105, 145, 0.4),	
-						inset 0 -30px 0 rgba(209, 242, 165, 0.4);
-		  }
-		  100% {
-		    box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
-						inset 0 30px 0 rgba(239, 250, 180, 0.4),
-						inset -30px 0 0 rgba(255, 196, 140, 0.4),	
-						inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-		  }
-		}
-		@keyframes colordancing {
-		  0% {
-		    color: #D1F2A5;
-		  }
-		  25% {
-		    color: #F56991;
-		  }
-		  50% {
-		    color: #FFC48C;
-		  }
-		  75% {
-		    color: #EFFAB4;
-		  }
-		  100% {
-		    color: #D1F2A5;
-		  }
-		}
-		@keyframes colordancing2 {
-		  0% {
-		    color: #FFC48C;
-		  }
-		  25% {
-		    color: #EFFAB4;
-		  }
-		  50% {
-		    color: #D1F2A5;
-		  }
-		  75% {
-		    color: #F56991;
-		  }
-		  100% {
-		    color: #FFC48C;
-		  }
-		}
-
-		/* demo stuff */
 		* {
-		    -webkit-box-sizing: border-box;
-		    -moz-box-sizing: border-box;
-		    box-sizing: border-box;
+		  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		  transform-style: preserve-3d;
 		}
+
+		*:focus {
+		  outline: none !important;
+		}
+
+		body,
+		html {
+		  height: 100%;
+		}
+
 		body {
-		  background-color: #416475;
-		  margin-bottom: 50px;
+		  display: flex;
+		  align-items: center;
+		  align-content: center;
+		  justify-content: center;
+		  padding: 12px;
+		  background: #1d1f21;
+		  color: white;
+		  font-family: "brandon-grotesque", "Brandon Grotesque", "Source Sans Pro", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+		  font-size: 24px;
+		  text-rendering: optimizeLegibility;
+		  -webkit-font-smoothing: antialiased;
 		}
-		html, button, input, select, textarea {
-		    font-family: 'Montserrat', Helvetica, sans-serif;
-		    color: #92a4ad;
+
+		::-moz-selection {
+		  background: none;
 		}
-		h1 {
-		  text-align: center;
-		  margin: 30px 15px;
+
+		::selection {
+		  background: none;
 		}
-		.zoom-area { 
-		  max-width: 490px;
-		  margin: 30px auto 30px;
-		  font-size: 19px;
-		  text-align: center;
+
+		a {
+		  display: block;
+		  cursor: pointer;
+		  -webkit-animation: pulseColor 1000ms linear 3100ms forwards;
+		          animation: pulseColor 1000ms linear 3100ms forwards;
+		  font-weight: 500;
 		}
-		.link-container {
-		  text-align: center;
+		a:hover b, a:focus b {
+		  color: #f04f54;
 		}
-		a.more-link {
-		  text-transform: uppercase;
-		  font-size: 13px;
-		    background-color: #92a4ad;
-		    padding: 10px 15px;
-		    border-radius: 0;
-		    color: #416475;
-		    display: inline-block;
-		    margin-right: 5px;
-		    margin-bottom: 5px;
-		    line-height: 1.5;
-		    text-decoration: none;
-		  margin-top: 50px;
-		  letter-spacing: 1px;
+		a:active b {
+		  color: #2bbc8a;
 		}
-	</style>
+
+		svg {
+		  width: 50px;
+		  height: auto;
+		}
+
+		.crack {
+		  position: relative;
+		  z-index: 4;
+		  margin-left: -50px;
+		}
+		.crack polyline {
+		  fill: none;
+		  stroke: #f04f54;
+		  stroke-width: 10px;
+		  stroke-linecap: round;
+		  stroke-linejoin: round;
+		  stroke-dasharray: 1649.099;
+		  stroke-dashoffset: 1649.099;
+		  -webkit-animation: drawStroke 1500ms ease-out 500ms forwards;
+		          animation: drawStroke 1500ms ease-out 500ms forwards;
+		}
+
+		main {
+		  display: flex;
+		  align-items: center;
+		  align-content: center;
+		  justify-content: center;
+		}
+		main > div {
+		  display: flex;
+		  align-items: center;
+		  align-content: center;
+		  position: relative;
+		  overflow: hidden;
+		}
+		main > div svg {
+		  position: relative;
+		  z-index: 1;
+		}
+		main > div svg polygon {
+		  fill: #1d1f21;
+		}
+		main > div span {
+		  display: block;
+		  position: relative;
+		  z-index: 0;
+		  padding: 0 12px;
+		  line-height: 1.4;
+		}
+		main > div:first-child {
+		  text-align: right;
+		  z-index: 1;
+		}
+		main > div:first-child span:first-child {
+		  opacity: 0;
+		  transform: translateX(100%);
+		  -webkit-animation: translateLeft 1000ms linear 1250ms forwards;
+		          animation: translateLeft 1000ms linear 1250ms forwards;
+		}
+		main > div:first-child span:last-child {
+		  opacity: 0;
+		  transform: translateX(100%);
+		  -webkit-animation: translateLeft 1000ms linear 1450ms forwards;
+		          animation: translateLeft 1000ms linear 1450ms forwards;
+		}
+		main > div:first-child svg polygon {
+		  -webkit-animation: removeFill 10ms ease-out 1600ms forwards;
+		          animation: removeFill 10ms ease-out 1600ms forwards;
+		}
+		main > div:last-child {
+		  z-index: 0;
+		  margin-left: -50px;
+		}
+		main > div:last-child span:first-child {
+		  opacity: 0;
+		  transform: translateX(-100%);
+		  -webkit-animation: translateRight 1000ms linear 1650ms forwards;
+		          animation: translateRight 1000ms linear 1650ms forwards;
+		}
+		main > div:last-child span:last-child {
+		  opacity: 0;
+		  transform: translateX(-100%);
+		  -webkit-animation: translateRight 1000ms linear 1850ms forwards;
+		          animation: translateRight 1000ms linear 1850ms forwards;
+		}
+
+		@-webkit-keyframes drawStroke {
+		  0% {
+		    stroke-dashoffset: 1649.099;
+		  }
+		  100% {
+		    stroke-dashoffset: 0;
+		  }
+		}
+
+		@keyframes drawStroke {
+		  0% {
+		    stroke-dashoffset: 1649.099;
+		  }
+		  100% {
+		    stroke-dashoffset: 0;
+		  }
+		}
+		@-webkit-keyframes removeFill {
+		  0% {
+		    fill: #1d1f21;
+		  }
+		  100% {
+		    fill: rgba(29, 31, 33, 0);
+		  }
+		}
+		@keyframes removeFill {
+		  0% {
+		    fill: #1d1f21;
+		  }
+		  100% {
+		    fill: rgba(29, 31, 33, 0);
+		  }
+		}
+		@-webkit-keyframes pulseColor {
+		  0% {
+		    color: white;
+		  }
+		  25% {
+		    color: #2bbc8a;
+		  }
+		  50% {
+		    color: white;
+		  }
+		  75% {
+		    color: #2bbc8a;
+		  }
+		  100% {
+		    color: white;
+		  }
+		}
+		@keyframes pulseColor {
+		  0% {
+		    color: white;
+		  }
+		  25% {
+		    color: #2bbc8a;
+		  }
+		  50% {
+		    color: white;
+		  }
+		  75% {
+		    color: #2bbc8a;
+		  }
+		  100% {
+		    color: white;
+		  }
+		}
+		/* https://goo.gl/v323yz */
+		@-webkit-keyframes translateLeft {
+		  0% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 150, 0, 0, 1);
+		    opacity: 1;
+		  }
+		  7.61% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 69.561, 0, 0, 1);
+		  }
+		  11.41% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 39.355, 0, 0, 1);
+		  }
+		  15.12% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 17.801, 0, 0, 1);
+		  }
+		  18.92% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3.02, 0, 0, 1);
+		  }
+		  22.72% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -5.661, 0, 0, 1);
+		  }
+		  30.23% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -10.852, 0, 0, 1);
+		  }
+		  50.25% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2.282, 0, 0, 1);
+		  }
+		  70.27% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.519, 0, 0, 1);
+		  }
+		  100% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		    opacity: 1;
+		  }
+		}
+		@keyframes translateLeft {
+		  0% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 150, 0, 0, 1);
+		    opacity: 1;
+		  }
+		  7.61% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 69.561, 0, 0, 1);
+		  }
+		  11.41% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 39.355, 0, 0, 1);
+		  }
+		  15.12% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 17.801, 0, 0, 1);
+		  }
+		  18.92% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3.02, 0, 0, 1);
+		  }
+		  22.72% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -5.661, 0, 0, 1);
+		  }
+		  30.23% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -10.852, 0, 0, 1);
+		  }
+		  50.25% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2.282, 0, 0, 1);
+		  }
+		  70.27% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.519, 0, 0, 1);
+		  }
+		  100% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		    opacity: 1;
+		  }
+		}
+		/* https://goo.gl/p1Hnde */
+		@-webkit-keyframes translateRight {
+		  0% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -150, 0, 0, 1);
+		    opacity: 1;
+		  }
+		  7.61% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -69.561, 0, 0, 1);
+		  }
+		  11.41% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -39.355, 0, 0, 1);
+		  }
+		  15.12% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -17.801, 0, 0, 1);
+		  }
+		  18.92% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -3.02, 0, 0, 1);
+		  }
+		  22.72% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5.661, 0, 0, 1);
+		  }
+		  30.23% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10.852, 0, 0, 1);
+		  }
+		  50.25% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2.282, 0, 0, 1);
+		  }
+		  70.27% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.519, 0, 0, 1);
+		  }
+		  100% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		    opacity: 1;
+		  }
+		}
+		@keyframes translateRight {
+		  0% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -150, 0, 0, 1);
+		    opacity: 1;
+		  }
+		  7.61% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -69.561, 0, 0, 1);
+		  }
+		  11.41% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -39.355, 0, 0, 1);
+		  }
+		  15.12% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -17.801, 0, 0, 1);
+		  }
+		  18.92% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -3.02, 0, 0, 1);
+		  }
+		  22.72% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5.661, 0, 0, 1);
+		  }
+		  30.23% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10.852, 0, 0, 1);
+		  }
+		  50.25% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2.282, 0, 0, 1);
+		  }
+		  70.27% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.519, 0, 0, 1);
+		  }
+		  100% {
+		    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		    opacity: 1;
+		  }
+		}
+	</style>	
 </head>
-<h1>404 error page not found</h1>
-<p class="zoom-area"><b>Sorry</b> about that! </p>
-<section class="error-container">
-  <span>4</span>
-  <span><span class="screen-reader-text">0</span></span>
-  <span>4</span>
-</section>
-<div class="link-container">
-  <a target="_blank" href="https://songshibo.github.io" class="more-link">Visit Home</a>
-</div>
+<main>
+  <div>
+    <div>
+      <span>404&nbsp;error</span>
+      <span>page&nbsp;not&nbsp;found</span>
+    </div>
+    <svg viewBox='0 0 200 600'>
+      <polygon points='118.302698 8 59.5369448 66.7657528 186.487016 193.715824 14 366.202839 153.491505 505.694344 68.1413353 591.044514 200 591.044514 200 8'></polygon>
+    </svg>
+  </div>
+  <svg class='crack' viewBox='0 0 200 600'>
+    <polyline points='118.302698 8 59.5369448 66.7657528 186.487016 193.715824 14 366.202839 153.491505 505.694344 68.1413353 591.044514'></polyline>
+  </svg>
+  <div>
+    <svg viewBox='0 0 200 600'>
+      <polygon points='118.302698 8 59.5369448 66.7657528 186.487016 193.715824 14 366.202839 153.491505 505.694344 68.1413353 591.044514 0 591.044514 0 8'></polygon>
+    </svg>
+    <div>
+      <span>sorry&nbsp;about&nbsp;that!</span>
+      <span>
+        <a>
+          <b>return&nbsp;home?</b>
+        </a>
+      </span>
+    </div>
+  </div>
+</main>
