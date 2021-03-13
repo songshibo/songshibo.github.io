@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Isoline Image Effect Isoline Image Effect from KinoIsoline.This is an effect analysis for learning. Use Eye Depth -&gt; World Space Position  Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Isoline Shader">
+<meta property="og:title" content="Isoline Effect Analysis">
 <meta property="og:url" content="https://songshibo.github.io/2018/12/31/Isoline-Shader/">
 <meta property="og:site_name" content="Golevka Blog">
 <meta property="og:description" content="Isoline Image Effect Isoline Image Effect from KinoIsoline.This is an effect analysis for learning. Use Eye Depth -&gt; World Space Position  Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv">
@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://songshibo.github.io/images/g1g2.jpg">
 <meta property="og:image" content="https://songshibo.github.io/images/g_w.png">
 <meta property="article:published_time" content="2018-12-31T12:06:56.000Z">
-<meta property="article:modified_time" content="2021-03-11T08:26:14.094Z">
+<meta property="article:modified_time" content="2021-03-13T08:37:45.733Z">
 <meta property="article:author" content="Golevka">
 <meta property="article:tag" content="shader">
 <meta property="article:tag" content="unity">
@@ -43,7 +43,7 @@
       
     
     <!-- title -->
-    <title>Isoline Shader</title>
+    <title>Isoline Effect Analysis</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -214,16 +214,16 @@ mjx-container[display="true"] + br {
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&text=Isoline Shader"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&is_video=false&description=Isoline Shader"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Isoline Shader&body=Check out this article: https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&name=Isoline Shader&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/&t=Isoline Shader"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&text=Isoline Effect Analysis"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&is_video=false&description=Isoline Effect Analysis"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Isoline Effect Analysis&body=Check out this article: https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&name=Isoline Effect Analysis&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/&t=Isoline Effect Analysis"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -240,7 +240,7 @@ mjx-container[display="true"] + br {
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Isoline Shader
+        Isoline Effect Analysis
     </h1>
 
 
@@ -277,7 +277,7 @@ mjx-container[display="true"] + br {
   
 
   <div class="content" itemprop="articleBody">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h1 id="isoline-image-effect">Isoline Image Effect</h1>
+    <link rel="stylesheet" type="text&#x2F;css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.3.1/dist/hexo-tag-hint.min.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h1 id="isoline-image-effect">Isoline Image Effect</h1>
 <p>Isoline Image Effect from <a target="_blank" rel="noopener" href="https://github.com/keijiro/KinoIsoline">KinoIsoline</a>.This is an effect analysis for learning.</p>
 <h2 id="use-eye-depth---world-space-position">Use Eye Depth -&gt; World Space Position</h2>
 <ul>
@@ -369,16 +369,16 @@ g with model edge lines
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&text=Isoline Shader"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&is_video=false&description=Isoline Shader"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Isoline Shader&body=Check out this article: https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Shader"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&name=Isoline Shader&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/&t=Isoline Shader"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&text=Isoline Effect Analysis"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&is_video=false&description=Isoline Effect Analysis"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Isoline Effect Analysis&body=Check out this article: https://songshibo.github.io/2018/12/31/Isoline-Shader/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&title=Isoline Effect Analysis"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2018/12/31/Isoline-Shader/&name=Isoline Effect Analysis&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2018/12/31/Isoline-Shader/&t=Isoline Effect Analysis"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
