@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Background Voronoi Texture是游戏美术素材制作中常用的一种噪声贴图(Worley Noise)。 数学定义：a Voronoi diagram is a partition of a plane into regions close to each of a given set of objects. 通常情况，这里的objects是指有限的点(seeds),每个区域则是按">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用ComputeShader加速生成Voronoi Texture(JFA)">
+<meta property="og:url" content="https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/">
+<meta property="og:site_name" content="Golevka Blog">
+<meta property="og:description" content="Background Voronoi Texture是游戏美术素材制作中常用的一种噪声贴图(Worley Noise)。 数学定义：a Voronoi diagram is a partition of a plane into regions close to each of a given set of objects. 通常情况，这里的objects是指有限的点(seeds),每个区域则是按">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://songshibo.github.io/images/incell.jpg">
+<meta property="og:image" content="https://songshibo.github.io/images/2Dseamless.gif">
+<meta property="og:image" content="https://songshibo.github.io/images/3Dseamless.gif">
+<meta property="article:published_time" content="2020-11-30T07:59:51.000Z">
+<meta property="article:modified_time" content="2021-03-15T11:06:30.616Z">
+<meta property="article:author" content="Golevka">
+<meta property="article:tag" content="shader">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://songshibo.github.io/images/incell.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>使用ComputeShader加速生成Voronoi Texture(JFA)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/songshibo?tab=repositories">Repositories</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/11/18/Projective-Dynamics-Notes/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&text=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&is_video=false&description=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用ComputeShader加速生成Voronoi Texture(JFA)&body=Check out this article: https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&name=使用ComputeShader加速生成Voronoi Texture(JFA)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&t=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#applications"><span class="toc-number">1.1.</span> <span class="toc-text">Applications</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jumpflooding-algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">JumpFlooding Algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Eunity-compute-shader%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">基于Unity Compute Shader的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jfa"><span class="toc-number">2.2.</span> <span class="toc-text">JFA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seamless-voronoi"><span class="toc-number">3.</span> <span class="toc-text">Seamless Voronoi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#results"><span class="toc-number">4.</span> <span class="toc-text">Results</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#performance"><span class="toc-number">4.1.</span> <span class="toc-text">Performance</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        使用ComputeShader加速生成Voronoi Texture(JFA)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Golevka</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-11-30T07:59:51.000Z" itemprop="datePublished">2020-11-30</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Unity/">Unity</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/shader/" rel="tag">shader</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text&#x2F;css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.3.1/dist/hexo-tag-hint.min.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="background">Background</h2>
+<p>Voronoi Texture是游戏美术素材制作中常用的一种噪声贴图(Worley Noise)。</p>
+<p><strong>数学定义</strong>：a Voronoi diagram is a partition of a plane into regions close to each of a given set of objects.</p>
+<p>通常情况，这里的objects是指有限的点(seeds),每个区域则是按照不同的衡量方式进行划分。<a target="_blank" rel="noopener" href="https://docs.blender.org/manual/en/latest/render/shader_nodes/textures/voronoi.html">Blender的Voronoi Node</a></p>
+<h3 id="applications">Applications</h3>
+<p>几个常见的应用</p>
+<ul>
+<li>Volumetric Clouds</li>
+</ul>
+<div class="video-container"><iframe src="https://www.youtube.com/embed/4QOcCGI6xOU?rel=0&amp;showinfo=0" gesture="media" allow="encrypted-media" allowfullscreen=""></iframe></div>
+<ul>
+<li>Ghibli style procedural shading</li>
+</ul>
+<div class="video-container"><iframe src="https://www.youtube.com/embed/FHeBI5tAGP0?rel=0&amp;showinfo=0" gesture="media" allow="encrypted-media" allowfullscreen=""></iframe></div>
+<ul>
+<li>Water splash FX</li>
+</ul>
+<div class="video-container"><iframe src="https://www.youtube.com/embed/zZsfr5f273c?rel=0&amp;showinfo=0" gesture="media" allow="encrypted-media" allowfullscreen=""></iframe></div>
+<h3 id="jumpflooding-algorithm">JumpFlooding Algorithm</h3>
+<p>一般给定二维平面中的一组种子，最简单的方式即是贴图上每个像素遍历所有种子找最近的种子。显然，这种方法会导致性能随着种子数量的增加变差。为了保持高性能，常见的方法如将二维平面划分成子网格，每个Cell中只生成一个种子，每个像素只遍历其邻接的8个Cell中的种子（In-cell seed generation）。</p>
+<p>在采用真正随机生成的种子，或者种子并非静止的情况，则可以通过<a target="_blank" rel="noopener" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.101.8568&amp;rep=rep1&amp;type=pdf">Jump Flooding Algorithm</a>在GPU上并行生成Voronoi Diagram。</p>
+<h2 id="基于unity-compute-shader的实现">基于Unity Compute Shader的实现</h2>
+<ul>
+<li>Inputs
+<ul>
+<li><code>pixels</code>: RenderTexture(需要设置为非归一化带符号的格式, eg. ARGBHalf)</li>
+<li><code>seeds</code>: 种子数组(Vector2/3 array)</li>
+<li><code>numSeeds</code>: 种子的数量</li>
+<li><code>resolution</code>: RenderTexture的分辨率</li>
+<li><code>step</code>: JFA每步的步长</li>
+<li><code>minMax</code>: 二维数组，用于在ComputeShader中记录全局最小/大距离</li>
+</ul></li>
+<li>Kernels
+<ul>
+<li>Clear Kernel: 清除pixels中的所有最近种子信息</li>
+<li>Init Kernel: 把种子的信息初始化到pixels中</li>
+<li>JFA Kernel: JFA的一个substep，以当前的步长扩散最近的种子信息</li>
+<li>GlobalMinMax Kernel: 统计全局的最小/大数据，更新到minMax[]中</li>
+<li>Normalize: 根据minMax[]，渲染最后的贴图</li>
+</ul></li>
+</ul>
+<h3 id="初始化">初始化</h3>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Find Kernel</span></span><br><span class="line"><span class="built_in">int</span> clearKernel = voronoiCS.FindKernel(<span class="string">"Clear"</span>);</span><br><span class="line"><span class="built_in">int</span> initKernel = voronoiCS.FindKernel(<span class="string">"InitSeeds"</span>);</span><br><span class="line"><span class="built_in">int</span> solverKernel = voronoiCS.FindKernel(<span class="string">"JFA"</span>);</span><br><span class="line"><span class="built_in">int</span> minMaxKernel = voronoiCS.FindKernel(<span class="string">"GlobalMinMax"</span>);</span><br><span class="line"><span class="built_in">int</span> normalizeKernel = voronoiCS.FindKernel(<span class="string">"Normalize"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化pixels</span></span><br><span class="line">RenderTexture pixels = <span class="keyword">new</span> RenderTexture(resolution, resolution, <span class="number">0</span>, RenderTextureFormat.ARGBHalf, <span class="number">0</span>)</span><br><span class="line">{</span><br><span class="line">    enableRandomWrite = <span class="literal">true</span>,</span><br><span class="line">    dimension = UnityEngine.Rendering.TextureDimension.Tex2D,</span><br><span class="line">    wrapMode = TextureWrapMode.Repeat,</span><br><span class="line">    filterMode = FilterMode.Point</span><br><span class="line">};</span><br><span class="line">pixels.Create();</span><br><span class="line"><span class="comment">// 将pixels给所有需要用到的kernel</span></span><br><span class="line">voronoiCS.SetTexture(clearKernel, <span class="string">"pixels"</span>, pixels);</span><br><span class="line">voronoiCS.SetTexture(initKernel, <span class="string">"pixels"</span>, pixels);</span><br><span class="line">voronoiCS.SetTexture(solverKernel, <span class="string">"pixels"</span>, pixels);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化种子</span></span><br><span class="line">seeds = SeedGenerator.GenerateCompleteRandom2DSeed(seedNum);</span><br><span class="line">ComputeBuffer seedBuffer = <span class="keyword">new</span> ComputeBuffer(seeds.Length, Marshal.SizeOf(<span class="keyword">typeof</span>(Vector2)));</span><br><span class="line">seedBuffer.SetData(seeds);</span><br><span class="line">voronoiCS.SetBuffer(initKernel, <span class="string">"seeds"</span>, seedBuffer);</span><br><span class="line">voronoiCS.SetBuffer(solverKernel, <span class="string">"seeds"</span>, seedBuffer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化minMax数组</span></span><br><span class="line"><span class="built_in">int</span>[] minMax = { <span class="built_in">int</span>.MaxValue, <span class="number">0</span> };</span><br><span class="line">ComputeBuffer minMaxBuffer = <span class="keyword">new</span> ComputeBuffer(minMax.Length, <span class="keyword">sizeof</span>(<span class="built_in">int</span>));</span><br><span class="line">minMaxBuffer.SetData(minMax);</span><br><span class="line">voronoiCS.SetBuffer(minMaxKernel, <span class="string">"minMax"</span>, minMaxBuffer);</span><br><span class="line">voronoiCS.SetBuffer(normalizeKernel, <span class="string">"minMax"</span>, minMaxBuffer);</span><br></pre></td></tr></table></figure>
+<h3 id="jfa">JFA</h3>
+<p>初始的步长设置为 $ <sup>{</sup>{res} } $。算法过程为</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Clear Kernel</span></span><br><span class="line">voronoiCS.Dispatch(clearKernel, numGroupsTex, numGroupsTex, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// Init Kernel</span></span><br><span class="line">voronoiCS.Dispatch(initKernel, numGroupsInit, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// JFA</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">{</span><br><span class="line">    voronoiCS.SetInt(<span class="string">"step"</span>, step);</span><br><span class="line">    voronoiCS.Dispatch(solverKernel, numGroupsTex, numGroupsTex, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (step / <span class="number">2.0f</span> &lt; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        step = Mathf.CeilToInt(step / <span class="number">2.0f</span>);</span><br><span class="line">}</span><br><span class="line"><span class="comment">// Global Min/Max kernel</span></span><br><span class="line">voronoiCS.Dispatch(minMaxKernel, numGroupNormalize, numGroupNormalize, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// Normalize Kernel</span></span><br><span class="line">voronoiCS.Dispatch(normalizeKernel, numGroupNormalize, numGroupNormalize, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>3D的voronoi生成方式类似，只需将RenderTexture的dimension设置为Tex3D，对应Kernel的numthread和seeds的数据类型同步修改即可。</p>
+<h2 id="seamless-voronoi">Seamless Voronoi</h2>
+<p>上述方法生成的结果作为贴图使用时，一旦对贴图进行缩放，则会有明显的接缝。为解决这一问题，我们需要将分辨率扩大三倍，即创建8个和当前分辨率相同的邻接区域，并同时将种子也平移复制。即在生成阶段，我们生成一个3倍大小的贴图，但最后只取中间的区域。</p>
+<p>采用In-Cell方式生成无缝的voronoi时则相对简单。假设像素所处的Cell索引为<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="4.667ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2062.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="5B" d="M118 -250V750H255V710H158V-210H255V-250H118Z"></path></g><g data-mml-node="mi" transform="translate(278, 0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(850, 0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1294.7, 0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1784.7, 0)"><path data-c="5D" d="M22 710V750H159V-250H22V-210H119V710H22Z"></path></g></g></g></svg></mjx-container></span>,总Cell的数量为<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="4.979ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2200.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="5B" d="M118 -250V750H255V710H158V-210H255V-250H118Z"></path></g><g data-mml-node="mi" transform="translate(278, 0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(878, 0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1322.7, 0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1922.7, 0)"><path data-c="5D" d="M22 710V750H159V-250H22V-210H119V710H22Z"></path></g></g></g></svg></mjx-container></span>则其所采样的邻接Cell的索引为</p>
+<div data-align="center">
+<p><img src="/images/incell.jpg" width="80%"></p>
+</div>
+<h2 id="results">Results</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">2D Seamless Voronoi</th>
+<th style="text-align: center;">3D Seamless Voronoi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="/images/2Dseamless.gif" alt="-w256"></td>
+<td style="text-align: center;"><img src="/images/3Dseamless.gif" alt="-w256"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="performance">Performance</h3>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/songshibo?tab=repositories">Repositories</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#applications"><span class="toc-number">1.1.</span> <span class="toc-text">Applications</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jumpflooding-algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">JumpFlooding Algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Eunity-compute-shader%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">基于Unity Compute Shader的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jfa"><span class="toc-number">2.2.</span> <span class="toc-text">JFA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seamless-voronoi"><span class="toc-number">3.</span> <span class="toc-text">Seamless Voronoi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#results"><span class="toc-number">4.</span> <span class="toc-text">Results</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#performance"><span class="toc-number">4.1.</span> <span class="toc-text">Performance</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&text=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&is_video=false&description=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用ComputeShader加速生成Voronoi Texture(JFA)&body=Check out this article: https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&title=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&name=使用ComputeShader加速生成Voronoi Texture(JFA)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://songshibo.github.io/2020/11/30/Voronoi-diagram-generation/&t=使用ComputeShader加速生成Voronoi Texture(JFA)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2021
+    Golevka
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/songshibo?tab=repositories">Repositories</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
